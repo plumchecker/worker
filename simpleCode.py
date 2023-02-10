@@ -1,23 +1,21 @@
 import re
-
-EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")  # simple regex for emails validation
-
+from json import dumps as jsonify
 
 def is_valid_mail(email):
-    if EMAIL_REGEX.match(email):
-        return True
-    else:
-        return False
-      
+    EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")  # simple regex for emails validation
+    return EMAIL_REGEX.match(email) is not None
 
 def main_fuck():
-    with open('passwords.txt', 'r') as f:
-        logpass = []
-        for line in f:
-            line = line.strip()
-            login, password = re.split(";|,|:", line)
-            logpass.append([login, password])
+    logpass = []
+    try:
+        with open('passwords.txt', 'r') as f:
+            for line in f:
+                line = line.strip()
+                login, password = re.split(";|,|:", line)
+                logpass.append({"login": login, "password": password})
+    except FileNotFoundError:
+        print("Cannot find \"passwords.txt\"!")
+    print(jsonify(logpass))
 
-    print(logpass)
-    
-main_fuck()
+if __name__ == "__main__":    
+    main_fuck()
