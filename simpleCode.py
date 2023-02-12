@@ -2,7 +2,7 @@ import re
 from json import dumps as jsonify
 
 def is_valid_mail(email):
-    EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")  # simple regex for emails validation
+    EMAIL_REGEX = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")  # simple regex for emails validation
     return EMAIL_REGEX.match(email) is not None
 
 def main_fuck():
