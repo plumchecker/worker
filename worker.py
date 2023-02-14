@@ -4,14 +4,6 @@ import json
 import requests
 import sys
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python script.py <file_name>")
-        return
-
-    file_name = sys.argv[1]
-    txt_to_json(file_name)
-
 def send_request(ip, data_payloads):
     counter = 0
     hosts = {}
@@ -67,6 +59,10 @@ def txt_to_json(file_name):
 
             payload = {}
             payloads = []
+            
+if len(sys.argv) < 2:
+    print("Usage: python script.py <file_name>")
+    return
 
-if __name__ == '__main__':
-    main()
+file_name = sys.argv[1]
+txt_to_json(file_name)
