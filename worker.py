@@ -2,12 +2,20 @@ import concurrent.futures
 import re
 import json
 import requests
+import sys
 
-def send_request(data_payloads):
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <file_name>")
+        return
+
+    file_name = sys.argv[1]
+    txt_to_json(file_name)
+
+def send_request(ip, data_payloads):
     counter = 0
     hosts = {}
-
-    resp = requests.post("http://25.68.246.17:30001/api/leaks",json={"leaks": data_payloads})
+    resp = requests.post(ip, json={"leaks": data_payloads})
     print(resp.json())
 
 def process_line(line):
@@ -20,9 +28,14 @@ def process_line(line):
         raise ValueError("Invalid line format: {}".format(line))
 
 def txt_to_json(file_name):
+    with open('config.json', 'r') as config_file:
+        config = json.load(config_file)
+   
+    ip_address = config['ip_address']
+    batch_size = config['batch_size']
+    
     payload = {}
     payloads = []
-    batch_size = 100
     last_iter = False
     
     with open(file_name, 'r', encoding="utf-8") as file:
@@ -50,11 +63,10 @@ def txt_to_json(file_name):
                     payload = {"email": email, "domain": domain, "password": password}
                     payloads.append(payload)
             
-            send_request(payloads)
-            #with open(file_name + '.json', 'w', encoding="utf-8") as file1:
-            #    json.dump(payload, file1)
+            send_request(ip_address, payloads)
 
             payload = {}
             payloads = []
 
-txt_to_json("1.txt")
+if __name__ == '__main__':
+    main()
