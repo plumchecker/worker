@@ -60,9 +60,9 @@ def txt_to_json(file_name):
             payload = {}
             payloads = []
             
-if len(sys.argv) < 2:
-    print("Usage: python script.py <file_name>")
-    return
-
-file_name = sys.argv[1]
-txt_to_json(file_name)
+if __name__ == '__main__':            
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <file_name>")
+        return
+    file_name = sys.argv[1]
+    txt_to_json(file_name)
