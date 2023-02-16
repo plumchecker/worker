@@ -1,4 +1,1 @@
-{
-    "ip_address": "http://25.68.246.17:30001/api/leaks",
-    "batch_size": 100
-}
+{"ip_address": "http://localhost:30001/api/search", "batch_size": 100}

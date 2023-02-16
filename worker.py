@@ -19,12 +19,7 @@ def process_line(line):
     else:
         raise ValueError("Invalid line format: {}".format(line))
 
-def txt_to_json(file_name):
-    with open('config.json', 'r') as config_file:
-        config = json.load(config_file)
-   
-    ip_address = config['ip_address']
-    batch_size = config['batch_size']
+def txt_to_json(file_name, ip_address, batch_size):
     
     payload = {}
     payloads = []
@@ -38,13 +33,12 @@ def txt_to_json(file_name):
         while not last_iter:
             
             lines = [next(file).strip() for _ in range(batch_size)]
-            file_size = file_size - batch_size
+            file_size -= batch_size
             
             if batch_size > file_size:
                 batch_size = file_size
 
-            if file_size == 0:
-                last_iter = True
+            last_iter = file_size == 0
 
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 results = [executor.submit(process_line, line) for line in lines]
@@ -54,7 +48,6 @@ def txt_to_json(file_name):
                     domain = login.split("@")[1]
                     payload = {"email": email, "domain": domain, "password": password}
                     payloads.append(payload)
-            
             send_request(ip_address, payloads)
 
             payload = {}
@@ -63,6 +56,11 @@ def txt_to_json(file_name):
 if __name__ == '__main__':            
     if len(sys.argv) < 2:
         print("Usage: python script.py <file_name>")
-        return
-    file_name = sys.argv[1]
-    txt_to_json(file_name)
+    else:
+        file_name = sys.argv[1]
+        with open('config.json', 'r') as config_file:
+            config = json.load(config_file)
+   
+        ip_address = config['ip_address']
+        batch_size = config['batch_size']
+        txt_to_json(file_name, ip_address, batch_size)
