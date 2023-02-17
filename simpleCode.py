@@ -5,7 +5,7 @@ def is_valid_mail(email):
     EMAIL_REGEX = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")  # simple regex for emails validation
     return EMAIL_REGEX.match(email) is not None
 
-def main_fuck():
+def main():
     logpass = []
     try:
         with open('passwords.txt', 'r') as f:
@@ -18,4 +18,4 @@ def main_fuck():
     print(jsonify(logpass))
 
 if __name__ == "__main__":    
-    main_fuck()
+    main()
